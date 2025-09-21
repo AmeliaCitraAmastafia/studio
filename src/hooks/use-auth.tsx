@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -37,7 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const newUser: User = { id: Date.now().toString(), name, email, role };
     localStorage.setItem('slumber-user', JSON.stringify(newUser));
     setUser(newUser);
-    router.push('/dashboard');
+    if (role === 'guest') {
+      router.push('/');
+    } else {
+      router.push('/dashboard');
+    }
   };
 
   const logout = () => {
