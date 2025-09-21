@@ -47,7 +47,6 @@ export default function RoomsPage() {
   const [rooms, setRooms] = React.useState<Room[]>(initialRooms);
   const [selectedRoom, setSelectedRoom] = React.useState<Room | null>(null);
   const [isAddEditDialogOpen, setAddEditDialogOpen] = React.useState(false);
-  const [isArchiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
   const handleAddRoom = () => {
@@ -58,11 +57,6 @@ export default function RoomsPage() {
   const handleEditRoom = (room: Room) => {
     setSelectedRoom(room);
     setAddEditDialogOpen(true);
-  };
-
-  const handleArchiveRoom = (room: Room) => {
-    setSelectedRoom(room);
-    setArchiveDialogOpen(true);
   };
 
   const handleDeleteRoom = (room: Room) => {
@@ -92,14 +86,6 @@ export default function RoomsPage() {
       setRooms([newRoom, ...rooms]);
     }
     setAddEditDialogOpen(false);
-    setSelectedRoom(null);
-  };
-
-  const onConfirmArchive = () => {
-    if (selectedRoom) {
-      setRooms(rooms.map(r => r.id === selectedRoom.id ? { ...r, status: 'archived' } : r));
-    }
-    setArchiveDialogOpen(false);
     setSelectedRoom(null);
   };
   
@@ -140,7 +126,7 @@ export default function RoomsPage() {
             </TableHeader>
             <TableBody>
               {rooms.map((room) => (
-                <TableRow key={room.id} className={room.status === 'archived' ? 'bg-muted/50' : ''}>
+                <TableRow key={room.id}>
                   <TableCell className="hidden sm:table-cell">
                     <Image
                       alt={room.name}
@@ -155,7 +141,7 @@ export default function RoomsPage() {
                     {room.description}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={room.status === 'archived' ? 'secondary' : 'outline'}>{room.status === 'archived' ? 'Archived' : 'Available'}</Badge>
+                    <Badge variant={'outline'}>Available</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     ${room.price.toFixed(2)}
@@ -171,7 +157,6 @@ export default function RoomsPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => handleEditRoom(room)}>Edit</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleArchiveRoom(room)}>Archive</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteRoom(room)}>Delete</DropdownMenuItem>
                       </DropdownMenuContent>
@@ -194,22 +179,6 @@ export default function RoomsPage() {
         </DialogContent>
       </Dialog>
       
-      {/* Archive Dialog */}
-      <AlertDialog open={isArchiveDialogOpen} onOpenChange={setArchiveDialogOpen}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    Archiving this room will hide it from the main listings but will preserve its data. You can unarchive it later.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setSelectedRoom(null)}>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={onConfirmArchive}>Archive</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
       {/* Delete Dialog */}
         <AlertDialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
             <AlertDialogContent>

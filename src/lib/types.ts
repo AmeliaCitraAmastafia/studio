@@ -1,3 +1,4 @@
+
 export type User = {
   id: string;
   name: string;
@@ -15,7 +16,7 @@ export type Room = {
     name: string;
     icon: string;
   }[];
-  status?: 'available' | 'archived';
+  status?: 'available';
 };
 
 export type Booking = {
