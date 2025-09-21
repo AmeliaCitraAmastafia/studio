@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import type { User } from "@/lib/types";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -42,26 +43,23 @@ export default function LoginPage() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // For demo purposes, we can't know the role on login.
-    // We'll try to get it from localStorage or default to guest.
     try {
-      const storedUser = localStorage.getItem('slumber-user');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
+      const storedUsers = localStorage.getItem('slumber-users');
+      if (storedUsers) {
+        const users: User[] = JSON.parse(storedUsers);
         // A real app would verify password here
-        if (user.email === values.email) {
-          login(user.email, user.role);
+        const foundUser = users.find(u => u.email === values.email);
+        
+        if (foundUser) {
+          login(foundUser.name, foundUser.email, foundUser.role);
           return;
         }
       }
     } catch (error) {
-       console.error("Failed to parse user from localStorage", error);
+       console.error("Failed to parse users from localStorage", error);
     }
 
-    // If user not found or password incorrect, show error.
-    // For this demo, we can't really "log in" a user that hasn't "signed up"
-    // because we don't know their role.
-     toast({
+    toast({
         title: "Login Failed",
         description: "User not found or password incorrect. Please sign up if you don't have an account.",
         variant: "destructive",
