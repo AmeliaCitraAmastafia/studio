@@ -15,6 +15,17 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { Wifi, Tv, Wind, Utensils, Coffee, BedDouble, LucideProps } from 'lucide-react';
+import React from "react";
+
+const iconMap: { [key: string]: React.FC<LucideProps> } = {
+  Wifi,
+  Tv,
+  Wind,
+  Utensils,
+  Coffee,
+  BedDouble,
+};
 
 interface RoomCardProps {
   room: Room;
@@ -62,12 +73,15 @@ export function RoomCard({ room, className }: RoomCardProps) {
         <div className="mt-4">
           <h4 className="font-semibold mb-2 text-sm">Amenities</h4>
           <div className="flex flex-wrap gap-4 text-muted-foreground">
-            {room.amenities.map((amenity) => (
-              <div key={amenity.name} className="flex items-center gap-2 text-sm">
-                <amenity.icon className="w-4 h-4" />
-                <span>{amenity.name}</span>
-              </div>
-            ))}
+            {room.amenities.map((amenity) => {
+              const Icon = iconMap[amenity.icon];
+              return Icon ? (
+                <div key={amenity.name} className="flex items-center gap-2 text-sm">
+                  <Icon className="w-4 h-4" />
+                  <span>{amenity.name}</span>
+                </div>
+              ) : null
+            })}
           </div>
         </div>
       </CardContent>

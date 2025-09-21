@@ -14,7 +14,7 @@ export type Room = {
   imageHint: string;
   amenities: {
     name: string;
-    icon: React.ElementType;
+    icon: string;
   }[];
 };
 

@@ -1,5 +1,4 @@
 import type { Room, Booking } from './types';
-import { Wifi, Tv, Wind, Utensils, Coffee, BedDouble } from 'lucide-react';
 
 export const rooms: Room[] = [
   {
@@ -10,10 +9,10 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/101/600/400',
     imageHint: 'luxury suite',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
-      { name: 'Air Conditioning', icon: Wind },
-      { name: 'Room Service', icon: Utensils },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
+      { name: 'Air Conditioning', icon: 'Wind' },
+      { name: 'Room Service', icon: 'Utensils' },
     ],
   },
   {
@@ -24,9 +23,9 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/102/600/400',
     imageHint: 'double room',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
-      { name: 'Coffee Maker', icon: Coffee },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
+      { name: 'Coffee Maker', icon: 'Coffee' },
     ],
   },
   {
@@ -37,10 +36,10 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/201/600/400',
     imageHint: 'family room',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
-      { name: 'Air Conditioning', icon: Wind },
-      { name: 'Extra Beds', icon: BedDouble },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
+      { name: 'Air Conditioning', icon: 'Wind' },
+      { name: 'Extra Beds', icon: 'BedDouble' },
     ],
   },
   {
@@ -51,10 +50,10 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/202/600/400',
     imageHint: 'executive room',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
-      { name: 'Air Conditioning', icon: Wind },
-      { name: 'Coffee Maker', icon: Coffee },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
+      { name: 'Air Conditioning', icon: 'Wind' },
+      { name: 'Coffee Maker', icon: 'Coffee' },
     ],
   },
   {
@@ -65,10 +64,10 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/301/600/400',
     imageHint: 'deluxe room balcony',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
-      { name: 'Air Conditioning', icon: Wind },
-      { name: 'Room Service', icon: Utensils },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
+      { name: 'Air Conditioning', icon: 'Wind' },
+      { name: 'Room Service', icon: 'Utensils' },
     ],
   },
   {
@@ -79,8 +78,8 @@ export const rooms: Room[] = [
     imageUrl: 'https://picsum.photos/seed/302/600/400',
     imageHint: 'single room',
     amenities: [
-      { name: 'WiFi', icon: Wifi },
-      { name: 'TV', icon: Tv },
+      { name: 'WiFi', icon: 'Wifi' },
+      { name: 'TV', icon: 'Tv' },
     ],
   },
 ];
