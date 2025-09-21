@@ -40,12 +40,6 @@ export function AppSidebar() {
             icon: BedDouble,
             roles: ["admin", "cashier"],
           },
-          {
-            href: "/dashboard/users",
-            label: "Users",
-            icon: Users,
-            roles: ["admin"],
-          },
         ]
       : []),
   ];
