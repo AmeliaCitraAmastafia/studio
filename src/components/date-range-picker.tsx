@@ -14,11 +14,23 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 
+interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+  onDateChange?: (date: DateRange | undefined) => void;
+}
+
 export function DateRangePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  onDateChange,
+}: DateRangePickerProps) {
   const { toast } = useToast();
   const [date, setDate] = React.useState<DateRange | undefined>();
+
+  const handleDateSelect = (selectedDate: DateRange | undefined) => {
+    setDate(selectedDate);
+    if (onDateChange) {
+      onDateChange(selectedDate);
+    }
+  };
 
   const handleSearch = () => {
     if (date?.from && date?.to) {
@@ -68,7 +80,7 @@ export function DateRangePicker({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateSelect}
             numberOfMonths={2}
           />
         </PopoverContent>

@@ -3,6 +3,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
+import { BookingProvider } from '@/hooks/use-bookings';
 
 export const metadata: Metadata = {
   title: 'SlumberSite',
@@ -23,8 +24,10 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", process.env.NODE_ENV === "development" ? "debug-screens" : undefined)}>
         <AuthProvider>
-          {children}
-          <Toaster />
+          <BookingProvider>
+            {children}
+            <Toaster />
+          </BookingProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,3 +1,6 @@
+
+"use client";
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +9,12 @@ import { RoomCard } from '@/components/room-card';
 import { DateRangePicker } from '@/components/date-range-picker';
 import Link from 'next/link';
 import { UserNav } from '@/components/user-nav';
+import React from 'react';
+import { DateRange } from 'react-day-picker';
 
 export default function Home() {
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>();
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
@@ -34,7 +41,7 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl font-bold font-headline">Your Tranquil Getaway Awaits</h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl">Discover the perfect blend of comfort and luxury. Book your stay with us and create unforgettable memories.</p>
             <div className="mt-8 bg-background/90 backdrop-blur-sm p-4 rounded-lg shadow-2xl w-full max-w-4xl">
-              <DateRangePicker />
+              <DateRangePicker onDateChange={setDateRange} />
             </div>
           </div>
         </div>
@@ -44,7 +51,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-center mb-10 font-headline">Our Rooms</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {rooms.map((room) => (
-                <RoomCard key={room.id} room={room} />
+                <RoomCard key={room.id} room={room} selectedDateRange={dateRange} />
               ))}
             </div>
           </div>

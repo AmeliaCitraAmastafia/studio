@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { bookings as initialBookings } from "@/lib/data";
 import type { Booking } from "@/lib/types";
 import { format } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
@@ -41,9 +40,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { useBookings } from "@/hooks/use-bookings";
 
 export default function BookingsPage() {
-  const [bookings, setBookings] = React.useState<Booking[]>(initialBookings);
+  const { bookings, updateBookingStatus } = useBookings();
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(
     null
   );
@@ -55,12 +55,8 @@ export default function BookingsPage() {
     setDetailsOpen(true);
   };
 
-  const handleConfirmBooking = (booking: Booking) => {
-    setBookings(
-      bookings.map((b) =>
-        b.id === booking.id ? { ...b, status: "confirmed" } : b
-      )
-    );
+  const handleConfirmBooking = (bookingId: string) => {
+    updateBookingStatus(bookingId, "confirmed");
   };
 
   const handleCancelBooking = (booking: Booking) => {
@@ -70,15 +66,15 @@ export default function BookingsPage() {
   
   const onConfirmCancel = () => {
     if (selectedBooking) {
-        setBookings(
-            bookings.map((b) =>
-                b.id === selectedBooking.id ? { ...b, status: "cancelled" } : b
-            )
-        );
+        updateBookingStatus(selectedBooking.id, "cancelled");
     }
     setCancelOpen(false);
     setSelectedBooking(null);
   }
+  
+  // Sort bookings by check-in date, most recent first
+  const sortedBookings = [...bookings].sort((a, b) => new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime());
+
 
   return (
     <>
@@ -99,15 +95,15 @@ export default function BookingsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {bookings.map((booking) => (
+              {sortedBookings.map((booking) => (
                 <TableRow key={booking.id}>
                   <TableCell>
                     <div className="font-medium">{booking.guestName}</div>
                   </TableCell>
                   <TableCell>{booking.roomName}</TableCell>
                   <TableCell>
-                    {format(booking.checkIn, "PP")} -{" "}
-                    {format(booking.checkOut, "PP")}
+                    {format(new Date(booking.checkIn), "PP")} -{" "}
+                    {format(new Date(booking.checkOut), "PP")}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge
@@ -152,7 +148,7 @@ export default function BookingsPage() {
                           View Details
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => handleConfirmBooking(booking)}
+                          onClick={() => handleConfirmBooking(booking.id)}
                           disabled={booking.status !== "pending"}
                         >
                           Confirm Booking
@@ -195,11 +191,11 @@ export default function BookingsPage() {
                 </div>
                  <div className="grid grid-cols-[100px_1fr] items-center gap-4">
                     <span className="text-muted-foreground">Check-in</span>
-                    <span>{format(selectedBooking.checkIn, "PPP")}</span>
+                    <span>{format(new Date(selectedBooking.checkIn), "PPP")}</span>
                 </div>
                  <div className="grid grid-cols-[100px_1fr] items-center gap-4">
                     <span className="text-muted-foreground">Check-out</span>
-                    <span>{format(selectedBooking.checkOut, "PPP")}</span>
+                    <span>{format(new Date(selectedBooking.checkOut), "PPP")}</span>
                 </div>
                 <div className="grid grid-cols-[100px_1fr] items-center gap-4">
                     <span className="text-muted-foreground">Status</span>

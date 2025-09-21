@@ -17,6 +17,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Wifi, Tv, Wind, Utensils, Coffee, BedDouble, type LucideProps } from 'lucide-react';
 import React from "react";
+import { useBookings } from "@/hooks/use-bookings";
+import { DateRange } from "react-day-picker";
+import { addDays } from "date-fns";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Wifi,
@@ -30,12 +33,14 @@ const iconMap: { [key: string]: React.FC<LucideProps> } = {
 interface RoomCardProps {
   room: Room;
   className?: string;
+  selectedDateRange?: DateRange;
 }
 
-export function RoomCard({ room, className }: RoomCardProps) {
+export function RoomCard({ room, className, selectedDateRange }: RoomCardProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useAuth();
+  const { addBooking } = useBookings();
 
   const handleBooking = () => {
     if (!user) {
@@ -47,11 +52,29 @@ export function RoomCard({ room, className }: RoomCardProps) {
       router.push("/login");
       return;
     }
+    
+    // For demo, let's create a booking for 2 nights from tomorrow
+    const checkIn = selectedDateRange?.from || addDays(new Date(), 1);
+    const checkOut = selectedDateRange?.to || addDays(new Date(), 3);
+    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 3600 * 24));
+
+
+    addBooking({
+        roomId: room.id,
+        roomName: room.name,
+        guestName: user.name,
+        checkIn,
+        checkOut,
+        totalPrice: room.price * nights,
+    });
+
 
     toast({
       title: "Booking Request Sent",
-      description: `Your request for ${room.name} has been sent. Awaiting confirmation.`,
+      description: `Your request for ${room.name} has been sent. You can check the status in your dashboard.`,
     });
+
+    router.push('/dashboard/bookings');
   };
 
   return (
