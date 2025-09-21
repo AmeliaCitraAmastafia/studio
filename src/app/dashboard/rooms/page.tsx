@@ -48,7 +48,7 @@ import { useLogs } from "@/hooks/use-logs";
 export default function RoomsPage() {
   const { user } = useAuth();
   const { addLog } = useLogs();
-  const isAdmin = user?.role === 'admin';
+  const canManageRooms = user?.role === 'admin' || user?.role === 'cashier';
 
   const [rooms, setRooms] = React.useState<Room[]>(initialRooms);
   const [selectedRoom, setSelectedRoom] = React.useState<Room | null>(null);
@@ -112,7 +112,7 @@ export default function RoomsPage() {
     <>
       <Header title="Rooms" />
       <main className="flex-1 p-6">
-        {isAdmin && (
+        {canManageRooms && (
             <div className="flex justify-end mb-4">
             <Button onClick={handleAddRoom}>
                 <PlusCircle className="mr-2 h-4 w-4" />
@@ -131,7 +131,7 @@ export default function RoomsPage() {
                 <TableHead className="hidden md:table-cell">Description</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Price</TableHead>
-                {isAdmin && (
+                {canManageRooms && (
                     <TableHead>
                         <span className="sr-only">Actions</span>
                     </TableHead>
@@ -160,7 +160,7 @@ export default function RoomsPage() {
                   <TableCell className="text-right">
                     ${room.price.toFixed(2)}
                   </TableCell>
-                  {isAdmin && (
+                  {canManageRooms && (
                     <TableCell className="text-right">
                         <DropdownMenu>
                         <DropdownMenuTrigger asChild>
