@@ -16,6 +16,7 @@ export type Room = {
     name: string;
     icon: string;
   }[];
+  status?: 'available' | 'archived';
 };
 
 export type Booking = {
