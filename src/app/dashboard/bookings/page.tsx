@@ -1,3 +1,6 @@
+"use client";
+
+import * as React from "react";
 import { Header } from "@/components/header";
 import {
   Table,
@@ -9,7 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { bookings } from "@/lib/data";
+import { bookings as initialBookings } from "@/lib/data";
+import type { Booking } from "@/lib/types";
 import { format } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -19,9 +23,63 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 export default function BookingsPage() {
+  const [bookings, setBookings] = React.useState<Booking[]>(initialBookings);
+  const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(
+    null
+  );
+  const [isDetailsOpen, setDetailsOpen] = React.useState(false);
+  const [isCancelOpen, setCancelOpen] = React.useState(false);
+
+  const handleViewDetails = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setDetailsOpen(true);
+  };
+
+  const handleConfirmBooking = (booking: Booking) => {
+    setBookings(
+      bookings.map((b) =>
+        b.id === booking.id ? { ...b, status: "confirmed" } : b
+      )
+    );
+  };
+
+  const handleCancelBooking = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setCancelOpen(true);
+  };
+  
+  const onConfirmCancel = () => {
+    if (selectedBooking) {
+        setBookings(
+            bookings.map((b) =>
+                b.id === selectedBooking.id ? { ...b, status: "cancelled" } : b
+            )
+        );
+    }
+    setCancelOpen(false);
+    setSelectedBooking(null);
+  }
+
   return (
     <>
       <Header title="Bookings" />
@@ -48,7 +106,8 @@ export default function BookingsPage() {
                   </TableCell>
                   <TableCell>{booking.roomName}</TableCell>
                   <TableCell>
-                    {format(booking.checkIn, "PP")} - {format(booking.checkOut, "PP")}
+                    {format(booking.checkIn, "PP")} -{" "}
+                    {format(booking.checkOut, "PP")}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge
@@ -60,8 +119,13 @@ export default function BookingsPage() {
                           : "destructive"
                       }
                       className={cn(
-                        booking.status === 'confirmed' && 'bg-green-600 text-white',
-                        booking.status === 'pending' && 'bg-yellow-500 text-black',
+                        "capitalize",
+                        booking.status === "confirmed" &&
+                          "bg-green-600 text-white",
+                        booking.status === "pending" &&
+                          "bg-yellow-500 text-black",
+                        booking.status === "cancelled" &&
+                          "bg-destructive text-destructive-foreground"
                       )}
                     >
                       {booking.status}
@@ -73,16 +137,31 @@ export default function BookingsPage() {
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <Button
+                          aria-haspopup="true"
+                          size="icon"
+                          variant="ghost"
+                        >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Confirm Booking</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem onClick={() => handleViewDetails(booking)}>
+                          View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleConfirmBooking(booking)}
+                          disabled={booking.status !== "pending"}
+                        >
+                          Confirm Booking
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleCancelBooking(booking)}
+                          disabled={booking.status === "cancelled"}
+                        >
                           Cancel Booking
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -94,6 +173,89 @@ export default function BookingsPage() {
           </Table>
         </div>
       </main>
+
+      {/* View Details Dialog */}
+      <Dialog open={isDetailsOpen} onOpenChange={setDetailsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Booking Details</DialogTitle>
+            <DialogDescription>
+              Viewing details for booking ID: {selectedBooking?.id}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedBooking && (
+             <div className="grid gap-4 py-4 text-sm">
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Guest</span>
+                    <span>{selectedBooking.guestName}</span>
+                </div>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Room</span>
+                    <span>{selectedBooking.roomName}</span>
+                </div>
+                 <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Check-in</span>
+                    <span>{format(selectedBooking.checkIn, "PPP")}</span>
+                </div>
+                 <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Check-out</span>
+                    <span>{format(selectedBooking.checkOut, "PPP")}</span>
+                </div>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Status</span>
+                     <Badge
+                      variant={
+                        selectedBooking.status === "confirmed"
+                          ? "default"
+                          : selectedBooking.status === "pending"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                      className={cn(
+                        "capitalize w-fit",
+                        selectedBooking.status === "confirmed" &&
+                          "bg-green-600 text-white",
+                        selectedBooking.status === "pending" &&
+                          "bg-yellow-500 text-black",
+                        selectedBooking.status === "cancelled" &&
+                          "bg-destructive text-destructive-foreground"
+                      )}
+                    >
+                      {selectedBooking.status}
+                    </Badge>
+                </div>
+                 <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <span className="text-muted-foreground">Total Price</span>
+                    <span className="font-semibold">${selectedBooking.totalPrice.toFixed(2)}</span>
+                </div>
+             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Cancel Booking Dialog */}
+      <AlertDialog open={isCancelOpen} onOpenChange={setCancelOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will cancel the booking for{" "}
+              <strong>{selectedBooking?.guestName}</strong>.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedBooking(null)}>
+              Dismiss
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onConfirmCancel}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Confirm Cancellation
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
