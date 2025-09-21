@@ -4,6 +4,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Booking } from '@/lib/types';
 import { bookings as initialBookings } from '@/lib/data';
+import { useLogs } from './use-logs'; // Import useLogs
 
 type BookingContextType = {
   bookings: Booking[];
@@ -17,6 +18,7 @@ const BookingContext = createContext<BookingContextType | undefined>(undefined);
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addLog } = useLogs();
 
   useEffect(() => {
     try {
@@ -53,13 +55,22 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         status: 'pending', // All new bookings are pending by default
     };
     setBookings(prevBookings => [newBooking, ...prevBookings]);
-  }, []);
+    addLog(`New booking created for ${bookingData.guestName} in ${bookingData.roomName}.`);
+  }, [addLog]);
 
   const updateBookingStatus = useCallback((bookingId: string, status: Booking['status']) => {
+    let bookingInfo = '';
     setBookings(prevBookings => 
-        prevBookings.map(b => b.id === bookingId ? { ...b, status } : b)
+        prevBookings.map(b => {
+            if (b.id === bookingId) {
+                bookingInfo = `for ${b.guestName} in ${b.roomName}`;
+                return { ...b, status };
+            }
+            return b;
+        })
     );
-  }, []);
+    addLog(`Booking ${bookingId} ${bookingInfo} status updated to ${status}.`);
+  }, [addLog]);
 
   return (
     <BookingContext.Provider value={{ bookings, addBooking, updateBookingStatus, loading }}>

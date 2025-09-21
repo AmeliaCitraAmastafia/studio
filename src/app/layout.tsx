@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 import { BookingProvider } from '@/hooks/use-bookings';
+import { LogProvider } from '@/hooks/use-logs';
 
 export const metadata: Metadata = {
   title: 'SlumberSite',
@@ -24,10 +25,12 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", process.env.NODE_ENV === "development" ? "debug-screens" : undefined)}>
         <AuthProvider>
-          <BookingProvider>
-            {children}
-            <Toaster />
-          </BookingProvider>
+          <LogProvider>
+            <BookingProvider>
+              {children}
+              <Toaster />
+            </BookingProvider>
+          </LogProvider>
         </AuthProvider>
       </body>
     </html>

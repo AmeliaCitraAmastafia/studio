@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Home, BedDouble, CalendarCheck, Users, LogOut } from "lucide-react";
+import { Home, BedDouble, CalendarCheck, LogOut, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "./ui/button";
 
@@ -39,6 +39,12 @@ export function AppSidebar() {
             label: "Rooms",
             icon: BedDouble,
             roles: ["admin", "cashier"],
+          },
+          {
+            href: "/dashboard/logs",
+            label: "Logs",
+            icon: FileText,
+            roles: ["admin"],
           },
         ]
       : []),

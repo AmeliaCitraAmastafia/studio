@@ -42,8 +42,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { RoomForm } from "@/components/room-form";
+import { useAuth } from "@/hooks/use-auth";
+import { useLogs } from "@/hooks/use-logs";
 
 export default function RoomsPage() {
+  const { user } = useAuth();
+  const { addLog } = useLogs();
+  const isAdmin = user?.role === 'admin';
+
   const [rooms, setRooms] = React.useState<Room[]>(initialRooms);
   const [selectedRoom, setSelectedRoom] = React.useState<Room | null>(null);
   const [isAddEditDialogOpen, setAddEditDialogOpen] = React.useState(false);
@@ -67,7 +73,9 @@ export default function RoomsPage() {
   const onSaveChanges = (roomData: Omit<Room, 'id' | 'amenities' | 'status'>) => {
     if (selectedRoom) {
       // Edit room
+      const oldName = selectedRoom.name;
       setRooms(rooms.map(r => r.id === selectedRoom.id ? { ...r, ...roomData } : r));
+      addLog(`Edited room: ${oldName} to ${roomData.name}`);
     } else {
       // Add new room
       const newRoom: Room = {
@@ -84,6 +92,7 @@ export default function RoomsPage() {
         status: 'available'
       };
       setRooms([newRoom, ...rooms]);
+      addLog(`Added new room: ${newRoom.name}`);
     }
     setAddEditDialogOpen(false);
     setSelectedRoom(null);
@@ -92,6 +101,7 @@ export default function RoomsPage() {
   const onConfirmDelete = () => {
     if (selectedRoom) {
         setRooms(rooms.filter(r => r.id !== selectedRoom.id));
+        addLog(`Deleted room: ${selectedRoom.name}`);
     }
     setDeleteDialogOpen(false);
     setSelectedRoom(null);
@@ -102,12 +112,14 @@ export default function RoomsPage() {
     <>
       <Header title="Rooms" />
       <main className="flex-1 p-6">
-        <div className="flex justify-end mb-4">
-          <Button onClick={handleAddRoom}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Room
-          </Button>
-        </div>
+        {isAdmin && (
+            <div className="flex justify-end mb-4">
+            <Button onClick={handleAddRoom}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Room
+            </Button>
+            </div>
+        )}
         <div className="border rounded-lg">
           <Table>
             <TableHeader>
@@ -119,9 +131,11 @@ export default function RoomsPage() {
                 <TableHead className="hidden md:table-cell">Description</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Price</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
+                {isAdmin && (
+                    <TableHead>
+                        <span className="sr-only">Actions</span>
+                    </TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -146,22 +160,24 @@ export default function RoomsPage() {
                   <TableCell className="text-right">
                     ${room.price.toFixed(2)}
                   </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button aria-haspopup="true" size="icon" variant="ghost">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleEditRoom(room)}>Edit</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteRoom(room)}>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+                  {isAdmin && (
+                    <TableCell className="text-right">
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleEditRoom(room)}>Edit</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteRoom(room)}>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

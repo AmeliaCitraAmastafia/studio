@@ -36,9 +36,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (email: string, role: User['role']) => {
     const name = email.split('@')[0].replace(/^\w/, c => c.toUpperCase());
-    const newUser: User = { id: Date.now().toString(), name, email, role };
     // In a real app, you would fetch user details from a server.
     // For this demo, we just recreate the user object.
+    const loggedInUser = JSON.parse(localStorage.getItem('slumber-user') || '{}');
+    const newUser: User = { ...loggedInUser, id: Date.now().toString(), name, email, role: loggedInUser.role || role };
+
     localStorage.setItem('slumber-user', JSON.stringify(newUser));
     setUser(newUser);
     router.push('/');

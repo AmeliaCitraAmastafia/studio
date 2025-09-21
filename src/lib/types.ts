@@ -7,7 +7,7 @@ export type User = {
 };
 
 export type Room = {
-  id: string;
+  id:string;
   name: string;
   description: string;
   price: number;
@@ -28,4 +28,11 @@ export type Booking = {
   checkOut: Date;
   status: 'pending' | 'confirmed' | 'cancelled';
   totalPrice: number;
+};
+
+export type LogEntry = {
+  id: string;
+  timestamp: Date;
+  user: string;
+  action: string;
 };
