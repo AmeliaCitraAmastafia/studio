@@ -41,14 +41,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // For this demo, we just recreate the user object.
     localStorage.setItem('slumber-user', JSON.stringify(newUser));
     setUser(newUser);
-    router.push('/dashboard');
+    router.push('/');
   };
 
   const signup = (name: string, email: string, role: User['role']) => {
     const newUser: User = { id: Date.now().toString(), name, email, role };
     localStorage.setItem('slumber-user', JSON.stringify(newUser));
     setUser(newUser);
-    router.push('/dashboard');
+    router.push('/');
   };
 
   const logout = () => {

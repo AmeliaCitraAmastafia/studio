@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect } from "react";
@@ -9,6 +10,8 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardLayout({
   children,
@@ -44,6 +47,11 @@ export default function DashboardLayout({
         <AppSidebar />
         <SidebarInset className="flex-1 flex flex-col">
           {children}
+          <div className="fixed bottom-4 right-4">
+            <Button asChild>
+                <Link href="/">Book a Room</Link>
+            </Button>
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>
