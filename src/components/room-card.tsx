@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
-import { Wifi, Tv, Wind, Utensils, Coffee, BedDouble, LucideProps } from 'lucide-react';
+import { Wifi, Tv, Wind, Utensils, Coffee, BedDouble, type LucideProps } from 'lucide-react';
 import React from "react";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
