@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -20,6 +21,8 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   description: z.string().min(10, "Description must be at least 10 characters."),
   price: z.coerce.number().min(0, "Price must be a positive number."),
+  imageUrl: z.string().url("Please enter a valid URL for the image."),
+  imageHint: z.string().min(2, "Image hint must be at least 2 characters.")
 });
 
 type RoomFormValues = z.infer<typeof formSchema>;
@@ -37,6 +40,8 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
       name: room?.name || "",
       description: room?.description || "",
       price: room?.price || 0,
+      imageUrl: room?.imageUrl || `https://picsum.photos/seed/${Date.now()}/600/400`,
+      imageHint: room?.imageHint || "",
     },
   });
 
@@ -84,6 +89,32 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
               <FormLabel>Price per night</FormLabel>
               <FormControl>
                 <Input type="number" placeholder="250" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/image.png" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageHint"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image Hint</FormLabel>
+              <FormControl>
+                <Input placeholder="luxury suite" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

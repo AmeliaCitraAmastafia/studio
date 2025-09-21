@@ -70,7 +70,7 @@ export default function RoomsPage() {
     setDeleteDialogOpen(true);
   };
 
-  const onSaveChanges = (roomData: Omit<Room, 'id' | 'imageUrl' | 'imageHint' | 'amenities'>) => {
+  const onSaveChanges = (roomData: Omit<Room, 'id' | 'amenities' | 'status'>) => {
     if (selectedRoom) {
       // Edit room
       setRooms(rooms.map(r => r.id === selectedRoom.id ? { ...r, ...roomData } : r));
@@ -78,13 +78,17 @@ export default function RoomsPage() {
       // Add new room
       const newRoom: Room = {
         id: `room-${Date.now()}`,
-        ...roomData,
-        imageUrl: `https://picsum.photos/seed/${Date.now()}/600/400`,
-        imageHint: "new room",
+        name: roomData.name,
+        description: roomData.description,
+        price: roomData.price,
+        imageUrl: roomData.imageUrl,
+        imageHint: roomData.imageHint,
         amenities: [ // Default amenities for new rooms
             { name: 'WiFi', icon: 'Wifi' },
             { name: 'TV', icon: 'Tv' },
+            { name: 'Air Conditioning', icon: 'Wind'}
         ],
+        status: 'available'
       };
       setRooms([newRoom, ...rooms]);
     }
