@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -29,7 +30,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -127,6 +127,7 @@ export default function RoomsPage() {
                   <span className="sr-only">Image</span>
                 </TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead className="hidden md:table-cell">Description</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Price</TableHead>
                 <TableHead>
@@ -148,6 +149,9 @@ export default function RoomsPage() {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{room.name}</TableCell>
+                  <TableCell className="hidden md:table-cell max-w-xs truncate">
+                    {room.description}
+                  </TableCell>
                   <TableCell>
                     <Badge variant={room.status === 'archived' ? 'secondary' : 'outline'}>{room.status === 'archived' ? 'Archived' : 'Available'}</Badge>
                   </TableCell>
