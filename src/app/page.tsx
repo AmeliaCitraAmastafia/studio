@@ -21,7 +21,7 @@ export default function Home() {
         <nav className="flex w-full items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-semibold font-headline">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10z"/><path d="M7 12a5 5 0 0 1 5-5v0a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5v0a5 5 0 0 1-5-5z"/></svg>
-            <span className="text-xl">SlumberSite</span>
+            <span className="text-xl">Hotel ra'as</span>
           </Link>
           <div className="flex items-center gap-4">
             <UserNav />
@@ -59,7 +59,7 @@ export default function Home() {
       </main>
       <footer className="border-t bg-background">
         <div className="container mx-auto px-4 py-6 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} SlumberSite. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Hotel ra'as. All rights reserved.</p>
         </div>
       </footer>
     </div>

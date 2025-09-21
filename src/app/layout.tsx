@@ -7,7 +7,7 @@ import { BookingProvider } from '@/hooks/use-bookings';
 import { LogProvider } from '@/hooks/use-logs';
 
 export const metadata: Metadata = {
-  title: 'SlumberSite',
+  title: "Hotel ra'as",
   description: 'Your tranquil getaway awaits.',
 };
 
