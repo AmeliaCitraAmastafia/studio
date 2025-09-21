@@ -7,7 +7,6 @@ export const rooms: Room[] = [
     description: 'A luxurious suite with a king-sized bed and a stunning city view. Experience ultimate comfort and elegance.',
     price: 250,
     imageUrl: 'https://picsum.photos/seed/101/600/400',
-    imageHint: 'luxury suite',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },
@@ -21,7 +20,6 @@ export const rooms: Room[] = [
     description: 'A cozy room with a double bed, perfect for solo travelers or couples. Modern, clean, and comfortable.',
     price: 150,
     imageUrl: 'https://picsum.photos/seed/102/600/400',
-    imageHint: 'double room',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },
@@ -34,7 +32,6 @@ export const rooms: Room[] = [
     description: 'A spacious family room with one double bed and two single beds, and amenities for all ages.',
     price: 220,
     imageUrl: 'https://picsum.photos/seed/201/600/400',
-    imageHint: 'family room',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },
@@ -48,7 +45,6 @@ export const rooms: Room[] = [
     description: 'An executive room with a dedicated workspace, ergonomic chair, and high-speed internet.',
     price: 180,
     imageUrl: 'https://picsum.photos/seed/202/600/400',
-    imageHint: 'executive room',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },
@@ -62,7 +58,6 @@ export const rooms: Room[] = [
     description: 'A beautiful deluxe room with a private balcony overlooking the serene hotel gardens. A perfect escape.',
     price: 200,
     imageUrl: 'https://picsum.photos/seed/301/600/400',
-    imageHint: 'deluxe room balcony',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },
@@ -76,7 +71,6 @@ export const rooms: Room[] = [
     description: 'A standard single room offering comfort, convenience, and value. Ideal for the solo adventurer.',
     price: 120,
     imageUrl: 'https://picsum.photos/seed/302/600/400',
-    imageHint: 'single room',
     amenities: [
       { name: 'WiFi', icon: 'Wifi' },
       { name: 'TV', icon: 'Tv' },

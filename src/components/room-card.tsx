@@ -63,7 +63,6 @@ export function RoomCard({ room, className }: RoomCardProps) {
             alt={room.name}
             fill
             className="object-cover"
-            data-ai-hint={room.imageHint}
           />
         </div>
       </CardHeader>

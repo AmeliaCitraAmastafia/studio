@@ -24,7 +24,6 @@ const formSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters."),
   price: z.coerce.number().min(0, "Price must be a positive number."),
   imageUrl: z.string().optional(),
-  imageHint: z.string().min(2, "Image hint must be at least 2 characters.")
 });
 
 type RoomFormValues = z.infer<typeof formSchema>;
@@ -43,7 +42,6 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
       description: room?.description || "",
       price: room?.price || 0,
       imageUrl: room?.imageUrl || "",
-      imageHint: room?.imageHint || "",
     },
   });
 
@@ -122,22 +120,6 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
               </FormControl>
               <FormDescription>
                 Upload an image from your device. If no image is selected, a placeholder will be used.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="imageHint"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image Hint</FormLabel>
-              <FormControl>
-                <Input placeholder="luxury suite" {...field} />
-              </FormControl>
-               <FormDescription>
-                A short description of the image for AI purposes (e.g., "modern kitchen").
               </FormDescription>
               <FormMessage />
             </FormItem>

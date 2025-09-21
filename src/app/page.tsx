@@ -29,7 +29,6 @@ export default function Home() {
             width={1920}
             height={600}
             className="w-full h-[400px] md:h-[500px] object-cover"
-            data-ai-hint="hotel lobby"
           />
           <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white p-4">
             <h1 className="text-4xl md:text-6xl font-bold font-headline">Your Tranquil Getaway Awaits</h1>

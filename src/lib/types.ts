@@ -11,7 +11,6 @@ export type Room = {
   description: string;
   price: number;
   imageUrl: string;
-  imageHint: string;
   amenities: {
     name: string;
     icon: string;

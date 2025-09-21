@@ -82,7 +82,6 @@ export default function RoomsPage() {
         description: roomData.description,
         price: roomData.price,
         imageUrl: roomData.imageUrl,
-        imageHint: roomData.imageHint,
         amenities: [ // Default amenities for new rooms
             { name: 'WiFi', icon: 'Wifi' },
             { name: 'TV', icon: 'Tv' },
@@ -149,7 +148,6 @@ export default function RoomsPage() {
                       height="64"
                       src={room.imageUrl}
                       width="64"
-                      data-ai-hint={room.imageHint}
                     />
                   </TableCell>
                   <TableCell className="font-medium">{room.name}</TableCell>

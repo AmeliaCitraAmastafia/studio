@@ -3,38 +3,32 @@
     {
       "id": "room-1",
       "description": "A luxurious suite with a king-sized bed and a stunning city view.",
-      "imageUrl": "https://picsum.photos/seed/1/600/400",
-      "imageHint": "luxury suite"
+      "imageUrl": "https://picsum.photos/seed/1/600/400"
     },
     {
       "id": "room-2",
       "description": "A cozy room with a double bed, perfect for solo travelers or couples.",
-      "imageUrl": "https://picsum.photos/seed/2/600/400",
-      "imageHint": "double room"
+      "imageUrl": "https://picsum.photos/seed/2/600/400"
     },
     {
       "id": "room-3",
       "description": "A spacious family room with multiple beds and amenities for all ages.",
-      "imageUrl": "https://picsum.photos/seed/3/600/400",
-      "imageHint": "family room"
+      "imageUrl": "https://picsum.photos/seed/3/600/400"
     },
     {
       "id": "room-4",
       "description": "An executive room with a dedicated workspace and high-speed internet.",
-      "imageUrl": "https://picsum.photos/seed/4/600/400",
-      "imageHint": "executive room"
+      "imageUrl": "https://picsum.photos/seed/4/600/400"
     },
     {
       "id": "room-5",
       "description": "A beautiful deluxe room with a balcony overlooking the garden.",
-      "imageUrl": "https://picsum.photos/seed/5/600/400",
-      "imageHint": "deluxe room balcony"
+      "imageUrl": "https://picsum.photos/seed/5/600/400"
     },
     {
       "id": "room-6",
       "description": "A standard single room offering comfort and convenience.",
-      "imageUrl": "https://picsum.photos/seed/6/600/400",
-      "imageHint": "single room"
+      "imageUrl": "https://picsum.photos/seed/6/600/400"
     }
   ]
 }
