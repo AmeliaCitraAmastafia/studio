@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,12 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { Room } from "@/lib/types";
+import React from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   description: z.string().min(10, "Description must be at least 10 characters."),
   price: z.coerce.number().min(0, "Price must be a positive number."),
-  imageUrl: z.string().url("Please enter a valid URL for the image."),
+  imageUrl: z.string().optional(),
   imageHint: z.string().min(2, "Image hint must be at least 2 characters.")
 });
 
@@ -29,7 +31,7 @@ type RoomFormValues = z.infer<typeof formSchema>;
 
 interface RoomFormProps {
   room: Room | null;
-  onSaveChanges: (data: RoomFormValues) => void;
+  onSaveChanges: (data: Omit<Room, 'id' | 'amenities' | 'status'>) => void;
   onCancel: () => void;
 }
 
@@ -40,13 +42,28 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
       name: room?.name || "",
       description: room?.description || "",
       price: room?.price || 0,
-      imageUrl: room?.imageUrl || `https://picsum.photos/seed/${Date.now()}/600/400`,
+      imageUrl: room?.imageUrl || "",
       imageHint: room?.imageHint || "",
     },
   });
 
   const onSubmit = (values: RoomFormValues) => {
-    onSaveChanges(values);
+    const finalValues = {
+        ...values,
+        imageUrl: values.imageUrl || `https://picsum.photos/seed/${Date.now()}/600/400`,
+    };
+    onSaveChanges(finalValues);
+  };
+  
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue("imageUrl", reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -99,10 +116,13 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image URL</FormLabel>
+              <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/image.png" {...field} />
+                <Input type="file" accept="image/*" onChange={handleImageChange} />
               </FormControl>
+              <FormDescription>
+                Upload an image from your device. If no image is selected, a placeholder will be used.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -116,6 +136,9 @@ export function RoomForm({ room, onSaveChanges, onCancel }: RoomFormProps) {
               <FormControl>
                 <Input placeholder="luxury suite" {...field} />
               </FormControl>
+               <FormDescription>
+                A short description of the image for AI purposes (e.g., "modern kitchen").
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
