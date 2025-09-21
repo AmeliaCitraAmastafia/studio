@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -38,7 +39,7 @@ export default function LoginPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "password", // for demo purposes
+      password: "",
     },
   });
 
@@ -47,8 +48,7 @@ export default function LoginPage() {
       const storedUsers = localStorage.getItem('slumber-users');
       if (storedUsers) {
         const users: User[] = JSON.parse(storedUsers);
-        // A real app would verify password here
-        const foundUser = users.find(u => u.email === values.email);
+        const foundUser = users.find(u => u.email === values.email && u.password === values.password);
         
         if (foundUser) {
           login(foundUser.name, foundUser.email, foundUser.role);

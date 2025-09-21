@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 type AuthContextType = {
   user: User | null;
   login: (name: string, email: string, role: User['role']) => void;
-  signup: (name: string, email: string, role: User['role']) => void;
+  signup: (name: string, email: string, password: string, role: User['role']) => void;
   logout: () => void;
   loading: boolean;
 };
@@ -35,14 +35,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (name: string, email: string, role: User['role']) => {
-    const newUser: User = { id: Date.now().toString(), name, email, role };
-    localStorage.setItem('slumber-active-user', JSON.stringify(newUser));
-    setUser(newUser);
+    const activeUser: User = { id: Date.now().toString(), name, email, role };
+    localStorage.setItem('slumber-active-user', JSON.stringify(activeUser));
+    setUser(activeUser);
     router.push('/');
   };
 
-  const signup = (name: string, email: string, role: User['role']) => {
-    const newUser: User = { id: Date.now().toString(), name, email, role };
+  const signup = (name: string, email: string, password: string, role: User['role']) => {
+    const newUser: User = { id: Date.now().toString(), name, email, password, role };
     
     // Get existing users or initialize a new array
     const storedUsers = localStorage.getItem('slumber-users');
@@ -53,8 +53,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('slumber-users', JSON.stringify(users));
 
     // Set the new user as the active user
-    localStorage.setItem('slumber-active-user', JSON.stringify(newUser));
-    setUser(newUser);
+    const activeUser: User = { id: newUser.id, name, email, role };
+    localStorage.setItem('slumber-active-user', JSON.stringify(activeUser));
+    setUser(activeUser);
     router.push('/');
   };
 

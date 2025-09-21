@@ -3,6 +3,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  password?: string; // For demo purposes
   role: 'admin' | 'cashier';
 };
 
@@ -16,7 +17,6 @@ export type Room = {
     name: string;
     icon: string;
   }[];
-  status?: 'available' | 'unavailable' | 'maintenance';
 };
 
 export type Booking = {

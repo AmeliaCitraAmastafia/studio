@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -51,7 +52,7 @@ export default function SignupPage() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    signup(values.name, values.email, values.role);
+    signup(values.name, values.email, values.password, values.role);
   }
 
   return (
