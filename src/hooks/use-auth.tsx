@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 type AuthContextType = {
   user: User | null;
   login: (email: string, role: User['role']) => void;
+  signup: (name: string, email: string, role: User['role']) => void;
   logout: () => void;
   loading: boolean;
 };
@@ -36,6 +37,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (email: string, role: User['role']) => {
     const name = email.split('@')[0].replace(/^\w/, c => c.toUpperCase());
     const newUser: User = { id: Date.now().toString(), name, email, role };
+    // In a real app, you would fetch user details from a server.
+    // For this demo, we just recreate the user object.
+    localStorage.setItem('slumber-user', JSON.stringify(newUser));
+    setUser(newUser);
+    if (role === 'guest') {
+      router.push('/');
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
+  const signup = (name: string, email: string, role: User['role']) => {
+    const newUser: User = { id: Date.now().toString(), name, email, role };
     localStorage.setItem('slumber-user', JSON.stringify(newUser));
     setUser(newUser);
     if (role === 'guest') {
@@ -52,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

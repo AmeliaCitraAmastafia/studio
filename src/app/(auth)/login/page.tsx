@@ -21,35 +21,51 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
   password: z.string().min(1, { message: "Password is required." }),
-  role: z.enum(["admin", "cashier", "guest"]),
 });
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "password", // for demo purposes
-      role: "cashier",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    login(values.email, values.role);
+    // For demo purposes, we can't know the role on login.
+    // We'll try to get it from localStorage or default to guest.
+    try {
+      const storedUser = localStorage.getItem('slumber-user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        // A real app would verify password here
+        if (user.email === values.email) {
+          login(user.email, user.role);
+          return;
+        }
+      }
+    } catch (error) {
+       console.error("Failed to parse user from localStorage", error);
+    }
+
+    // If user not found or password incorrect, show error.
+    // For this demo, we can't really "log in" a user that hasn't "signed up"
+    // because we don't know their role.
+     toast({
+        title: "Login Failed",
+        description: "User not found or password incorrect. Please sign up if you don't have an account.",
+        variant: "destructive",
+    });
   }
 
   return (
@@ -85,28 +101,6 @@ export default function LoginPage() {
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role (for demo)</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role to simulate" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="cashier">Cashier/Receptionist</SelectItem>
-                      <SelectItem value="guest">Guest</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
